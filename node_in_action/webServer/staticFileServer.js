@@ -7,10 +7,23 @@ var path = require('path');
 var http = require('http');
 var url = require('url');
 
+//request is an instance of http.IncomingMessage and response is an instance of http.ServerResponse.
+var http = http.createServer();
+http
+    .on('request',function(req,res){
+        var filePath = path.join(__dirname,url.parse(req.url).pathname);
+        var stream = fs.createReadStream(filePath);
+        stream.pipe(res);
+    });
+http.listen(3000);
+/*
 http.createServer(function(req,res){
     //获取请求静态资源的绝对路径
     //__dirname这个变量是指当前文件的绝对路径
     res.setHeader('Content-Type','text/js; charset=utf-8');
+    console.log(req.constructor.name);
+    console.log(res.constructor.name);
+    console.dir(req.url);
     var filePath = path.join(__dirname,url.parse(req.url).pathname);
 
     // var stream = fs.createReadStream(filePath);
@@ -52,3 +65,4 @@ http.createServer(function(req,res){
         }
     });
 }).listen(3000);
+*/
